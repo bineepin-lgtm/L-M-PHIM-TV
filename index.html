@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LỤM PHIM TV - OFFICIAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --nen-toi: #0f0c18;
+            --hong-slay: #ec4899;
+            --vang-chanh: #eab308;
+        }
+
+        body {
+            background-color: var(--nen-toi);
+            color: #ffffff;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Thanh bên (Sidebar) trượt */
+        #thanh-ben {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-100%);
+        }
+        #thanh-ben.dang-mo { transform: translateX(0); }
+
+        .trang { display: none; }
+        .trang.dang-hien { display: block; animation: hien_len 0.4s ease; }
+        @keyframes hien_len {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .nut-tap {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: 0.2s;
+        }
+        .nut-tap.dang-chon {
+            background: rgba(236, 72, 153, 0.25);
+            border-color: var(--hong-slay);
+            color: var(--hong-slay);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .glass-header { background: rgba(15, 12, 24, 0.8); backdrop-filter: blur(15px); }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Đầu trang (Header) -->
+    <header class="glass-header fixed top-0 w-full z-50 p-4 flex justify-between items-center border-b border-white/5">
+        <div class="flex items-center gap-4">
+            <button onclick="mo_thanh_ben()" class="text-white p-1"><i class="fa-solid fa-bars-staggered text-xl"></i></button>
+            <div class="flex items-center gap-2" onclick="chuyen_trang('trang-chu')">
+                <div class="bg-yellow-500 p-1.5 rounded-md text-black shadow-lg">
+                    <i class="fa-solid fa-basket-shopping text-sm"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tighter uppercase italic">LỤM PHIM <span class="text-yellow-500">TV</span></span>
+            </div>
+        </div>
+        <button class="bg-white/5 p-2 rounded-full text-white"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </header>
+
+    <!-- THANH BÊN (SIDEBAR) -->
+    <div id="thanh-ben" class="fixed inset-y-0 left-0 w-[300px] bg-[#161322] z-[70] p-6 shadow-2xl overflow-y-auto no-scrollbar border-r border-white/5">
+        <div class="flex justify-between items-center mb-8">
+            <span class="font-bold text-xl uppercase tracking-tighter text-yellow-500 italic">MENU CHÍNH</span>
+            <button onclick="dong_thanh_ben()" class="text-gray-400"><i class="fa-solid fa-xmark text-2xl"></i></button>
+        </div>
+
+        <nav class="space-y-6">
+            <!-- Khu vực Thành viên -->
+            <div class="bg-gray-800/40 p-4 rounded-2xl flex items-center gap-3 border border-white/5">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-pink-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-user-check text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Tài khoản</p>
+                    <p class="text-sm font-bold">Thành viên</p>
+                </div>
+            </div>
+
+            <!-- Menu lọc phim -->
+            <div class="space-y-3">
+                <a href="#" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all">
+                    <i class="fa-solid fa-fire text-orange-500"></i>
+                    <span class="font-semibold text-sm">Phim mới Update</span>
+                </a>
+
+                <!-- Chọn Ngôn Ngữ -->
+                <div class="pt-2">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase px-3 mb-2">Ngôn ngữ</p>
+                    <select class="w-full bg-white/5 p-3.5 rounded-xl text-sm border border-white/5 outline-none appearance-none cursor-pointer">
+                        <option class="bg-[#161322]">Tiếng Việt</option>
+                        <option class="bg-[#161322]">Tiếng Anh (Sub)</option>
+                        <option class="bg-[#161322]">Tiếng Hàn</option>
+                        <option class="bg-[#161322]">Tiếng Trung</option>
+                    </select>
+                </div>
+
+                <!-- Chọn Quốc Gia -->
+                <div class="pt-2">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase px-3 mb-2">Quốc gia</p>
+                    <select class="w-full bg-white/5 p-3.5 rounded-xl text-sm border border-white/5 outline-none appearance-none cursor-pointer">
+                        <option class="bg-[#161322]">Hàn Quốc</option>
+                        <option class="bg-[#161322]">Trung Quốc</option>
+                        <option class="bg-[#161322]">Âu Mỹ</option>
+                        <option class="bg-[#161322]">Việt Nam</option>
+                        <option class="bg-[#161322]">Thái Lan</option>
+                    </select>
+                </div>
+
+                <!-- Chọn Tuổi -->
+                <div class="pt-2">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase px-3 mb-2">Độ tuổi</p>
+                    <select class="w-full bg-white/5 p-3.5 rounded-xl text-sm border border-white/5 outline-none appearance-none cursor-pointer">
+                        <option class="bg-[#161322]">Mọi lứa tuổi (G)</option>
+                        <option class="bg-[#161322]">Trên 13 tuổi (T13)</option>
+                        <option class="bg-[#161322]">Trên 16 tuổi (T16)</option>
+                        <option class="bg-[#161322]">Người lớn (18+)</option>
+                    </select>
+                </div>
+
+                <!-- Tải App -->
+                <div class="pt-6 space-y-3">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase px-3">Tải App chính thức</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="#" class="flex flex-col items-center gap-2 p-4 bg-green-600/10 rounded-2xl border border-green-500/20 active:scale-95 transition-all">
+                            <i class="fa-brands fa-android text-2xl text-green-400"></i>
+                            <span class="text-[9px] font-bold text-green-400 uppercase tracking-tighter">Android</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center gap-2 p-4 bg-indigo-600/10 rounded-2xl border border-indigo-500/20 active:scale-95 transition-all">
+                            <i class="fa-solid fa-tv text-2xl text-indigo-400"></i>
+                            <span class="text-[9px] font-bold text-indigo-400 uppercase tracking-tighter">Smart TV</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="lop-phu" onclick="dong_thanh_ben()" class="fixed inset-0 bg-black/80 z-[65] hidden backdrop-blur-sm"></div>
+
+    <!-- TRANG CHỦ -->
+    <main id="trang-chu" class="trang dang-hien pt-16">
+        <!-- Banner đầu trang -->
+        <section class="relative w-full h-[400px] flex flex-col justify-end p-6 overflow-hidden">
+            <img id="banner-lon" src="" class="absolute inset-0 w-full h-full object-cover opacity-40 scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0f0c18] via-[#0f0c18]/20 to-transparent"></div>
+            <div class="relative z-10 text-center">
+                <span class="text-pink-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-2 block">XEM NHIỀU NHẤT</span>
+                <h1 id="tieu-de-lon" class="text-3xl font-bold mb-5 tracking-tight uppercase italic leading-tight"></h1>
+                <button onclick="bam_xem_ngay()" class="bg-gradient-to-r from-pink-500 to-rose-600 px-10 py-3.5 rounded-full font-bold shadow-2xl active:scale-95 transition-all">LỰM PHIM NGAY</button>
+            </div>
+        </section>
+
+        <!-- Danh sách phim mới -->
+        <section class="px-5 mt-10">
+            <h2 class="text-xl font-bold italic uppercase text-yellow-500 tracking-tighter mb-6">Mới cập nhật</h2>
+            <div id="vung-chua-phim" class="grid grid-cols-3 gap-4 pb-10">
+                <!-- Phim tự động sinh ra tại đây -->
+            </div>
+        </section>
+
+        <!-- Chân trang (Footer) & Lời nhắc -->
+        <footer class="px-6 py-12 mt-10 border-t border-white/5 bg-white/[0.01]">
+            <div class="text-center mb-10 max-w-sm mx-auto">
+                <p class="text-[11px] text-gray-400 leading-relaxed italic">
+                    "Web phim này được tạo ra nhằm mục đích giải trí và chia sẻ niềm đam mê điện ảnh. Chúng tớ khuyến khích các bạn hãy ủng hộ phim tại các ứng dụng bản quyền chính thức để tận hưởng chất lượng tốt nhất và ủng hộ tác giả. Chúc các bòa có giây phút thư giãn tuyệt vời cùng <span class="text-pink-500 font-bold">LỤM PHIM TV</span>! 🥰"
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center gap-8 border-t border-white/5 pt-10">
+                <div class="flex gap-8">
+                    <a href="#" class="text-gray-500 hover:text-pink-500 text-2xl transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-blue-500 text-2xl transition-all"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-red-500 text-2xl transition-all"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+                
+                <div class="text-center text-[9px] text-gray-600 space-y-2 uppercase tracking-widest">
+                    <p class="font-bold text-gray-500">© 2026 LỤM PHIM TV TEAM - ALL RIGHTS RESERVED</p>
+                    <p>LIÊN HỆ: lumphimtv.contact@gmail.com</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- TRANG CHI TIẾT -->
+    <main id="trang-chi-tiet" class="trang pt-16">
+        <section class="flex flex-col items-center px-6 pt-10 text-center">
+            <div class="w-44 aspect-[2/3] rounded-3xl overflow-hidden shadow-2xl mb-6 border-4 border-white/10">
+                <img id="anh-phim-ct" src="" class="w-full h-full object-cover">
+            </div>
+            <h1 id="ten-phim-ct" class="text-2xl font-bold px-4 leading-tight mb-2 uppercase italic tracking-tighter"></h1>
+            <p id="sub-phim-ct" class="text-gray-500 text-sm mb-8 italic"></p>
+        </section>
+
+        <section class="px-5 mt-4 pb-20">
+            <div class="flex gap-4 mb-8">
+                <button id="nut-sub" onclick="thay_doi_ban_dich('sub')" class="nut-kieu kich-hoat flex-1 py-3.5 rounded-2xl text-[10px] font-bold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-keyboard"></i> VIETSUB
+                </button>
+                <button id="nut-long" onclick="thay_doi_ban_dich('long')" class="nut-kieu flex-1 py-3.5 rounded-2xl text-[10px] font-bold flex items-center justify-center gap-2 text-gray-500">
+                    <i class="fa-solid fa-microphone"></i> LỒNG TIẾNG
+                </button>
+            </div>
+
+            <div id="vung-tap-phim" class="grid grid-cols-4 gap-3">
+                <!-- Số tập phim tự động nhảy tùy phim -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Thanh điều hướng dưới cùng -->
+    <div class="fixed bottom-0 w-full bg-[#161322]/90 backdrop-blur-xl border-t border-white/5 px-10 py-5 flex justify-between items-center z-[60]">
+        <button onclick="chuyen_trang('trang-chu')" class="flex flex-col items-center gap-1.5 text-pink-500">
+            <i class="fa-solid fa-house-chimney text-xl"></i>
+            <span class="text-[9px] font-bold uppercase">Trang chủ</span>
+        </button>
+        <button class="flex flex-col items-center gap-1.5 text-gray-500"><i class="fa-solid fa-compass text-xl"></i><span class="text-[9px] font-bold uppercase">Khám phá</span></button>
+        <button class="flex flex-col items-center gap-1.5 text-gray-500"><i class="fa-solid fa-user-circle text-xl"></i><span class="text-[9px] font-bold uppercase">Tôi</span></button>
+    </div>
+
+    <script>
+        // --- DỮ LIỆU PHIM (Sửa số tập phim tùy ý bòa ở đây) ---
+        const kho_phim = [
+            {
+                id: 1,
+                ten: "Tiếng yêu này dịch được không?",
+                sub: "Can This Love Be Translated?",
+                anh: "https://m.media-amazon.com/images/M/MV5BNjg0NmI0ZWQtNjY0MS00ZGY1LWE1ZmItYmFhN2M4Y2ExZTViXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg",
+                so_tap: 12
+            },
+            {
+                id: 2,
+                ten: "Linh Trưởng",
+                sub: "Primate",
+                anh: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OTkyLWFjYTMtMDQ2ZTEzNDIzMzE0XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
+                so_tap: 45
+            },
+            {
+                id: 3,
+                ten: "Xoắn Quẩy",
+                sub: "Twisted",
+                anh: "https://m.media-amazon.com/images/M/MV5BNmRjM2FkZjItYjg5Yi00YzM1LWFjMmQtYmNmOWJmNWZlYmU0XkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg",
+                so_tap: 100
+            }
+        ];
+
+        let phim_dang_duoc_xem = kho_phim[0];
+
+        // Hàm đổ dữ liệu phim ra màn hình
+        function hien_thi_phim() {
+            const vung_phim = document.getElementById('vung-chua-phim');
+            vung_phim.innerHTML = '';
+
+            // Cập nhật Banner
+            document.getElementById('banner-lon').src = kho_phim[0].anh;
+            document.getElementById('tieu-de-lon').innerText = kho_phim[0].ten;
+
+            kho_phim.forEach(phim => {
+                vung_phim.innerHTML += `
+                    <div onclick="xem_chi_tiet_phim(${phim.id})" class="space-y-2 cursor-pointer active:scale-95 transition-all">
+                        <div class="aspect-[2/3] rounded-2xl overflow-hidden border border-white/5 shadow-xl bg-gray-900">
+                            <img src="${phim.anh}" class="w-full h-full object-cover">
+                        </div>
+                        <p class="text-[9px] font-bold text-center uppercase truncate px-1 opacity-80">${phim.ten}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Hàm mở chi tiết và TỰ SINH SỐ TẬP
+        function xem_chi_tiet_phim(id) {
+            phim_dang_duoc_xem = kho_phim.find(p => p.id === id);
+            
+            document.getElementById('anh-phim-ct').src = phim_dang_duoc_xem.anh;
+            document.getElementById('ten-phim-ct').innerText = phim_dang_duoc_xem.ten;
+            document.getElementById('sub-phim-ct').innerText = phim_dang_duoc_xem.sub;
+
+            const vung_tap = document.getElementById('vung-tap-phim');
+            vung_tap.innerHTML = '';
+            
+            // Logic tự động đẻ ra số tập theo khai báo trong dữ liệu
+            for(let i = 1; i <= phim_dang_duoc_xem.so_tap; i++) {
+                vung_tap.innerHTML += `
+                    <button onclick="bam_chon_tap(this)" class="nut-tap py-4 rounded-2xl text-[10px] font-bold ${i===1 ? 'dang-chon' : ''}">
+                        Tập ${i}
+                    </button>
+                `;
+            }
+            chuyen_trang('trang-chi-tiet');
+        }
+
+        function bam_xem_ngay() { xem_chi_tiet_phim(phim_dang_duoc_xem.id); }
+
+        // Logic điều hướng và UI bằng tiếng Việt
+        function mo_thanh_ben() {
+            document.getElementById('thanh-ben').classList.add('dang-mo');
+            document.getElementById('lop-phu').classList.remove('hidden');
+        }
+
+        function dong_thanh_ben() {
+            document.getElementById('thanh-ben').classList.remove('dang-mo');
+            document.getElementById('lop-phu').classList.add('hidden');
+        }
+
+        function chuyen_trang(id_trang) {
+            document.querySelectorAll('.trang').forEach(t => t.classList.remove('dang-hien'));
+            document.getElementById(id_trang).classList.add('dang-hien');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            dong_thanh_ben();
+        }
+
+        function thay_doi_ban_dich(kieu) {
+            const nutSub = document.getElementById('nut-sub');
+            const nutLong = document.getElementById('nut-long');
+            nutSub.classList.toggle('kich-hoat', kieu === 'sub');
+            nutLong.classList.toggle('kich-hoat', kieu === 'long');
+            nutSub.classList.toggle('text-gray-500', kieu !== 'sub');
+            nutLong.classList.toggle('text-gray-500', kieu !== 'long');
+        }
+
+        function bam_chon_tap(nut) {
+            document.querySelectorAll('.nut-tap').forEach(n => n.classList.remove('dang-chon'));
+            nut.classList.add('dang-chon');
+        }
+
+        // Chạy khi trang web được nạp xong
+        window.onload = hien_thi_phim;
+    </script>
+</body>
+</html>
